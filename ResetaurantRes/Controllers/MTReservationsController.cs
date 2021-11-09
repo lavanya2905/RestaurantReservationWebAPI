@@ -78,7 +78,7 @@ namespace ResetaurantRes.Controllers
 
             return NoContent();
 
-            // return Ok(updatedMusicResource);
+            
 
         }
 
