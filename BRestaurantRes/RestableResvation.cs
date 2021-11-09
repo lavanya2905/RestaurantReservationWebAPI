@@ -33,8 +33,7 @@ namespace BRestaurantRes
 
         public async Task UpdateReservations(int id, MTReservation mTReservation)
         {
-            //_context.MTReservation.Add(mTReservation);
-            //await _context.SaveChangesAsync();
+            
             _context.MTReservation.Where(mtReservation =>
            (mtReservation.ResId == id)).Skip<MTReservation>(id);
             await _context.SaveChangesAsync();
@@ -59,6 +58,21 @@ namespace BRestaurantRes
             (mtReservation.ResDate == resdate) && (mtReservation.RtableId == restid)).Count();
 
 
+        }
+
+        public bool GetReservationsTcountByDate(DateTime resdate)
+        {
+
+            if(_context.MTReservation.Where(x =>
+            (x.ResDate == resdate)).Count()== _context.MRAvailableTables.Where(x =>
+            (x.Statusoftable == 1)).Count())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
 

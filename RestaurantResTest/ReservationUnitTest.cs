@@ -87,8 +87,10 @@ namespace RestaurantResTest
             // Act on Test  
             var response = controller.PostMTReservation(mTReservation).Result;
             Assert.NotNull(response);
-            
-          
+            Assert.Equal("lava", response.Value.Personname);
+            Assert.NotEqual(0, response.Value.ResId);
+
+
 
         }
     }

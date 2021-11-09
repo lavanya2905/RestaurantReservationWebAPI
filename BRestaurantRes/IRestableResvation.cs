@@ -13,6 +13,7 @@ namespace BRestaurantRes
         Task<IEnumerable<MTReservation>> GetAllReservations();
         Task<MTReservation> GetReservationsById(int id);
         int GetReservationsByDatetable(DateTime resdate, int restid);
+        bool GetReservationsTcountByDate(DateTime resdate);
         Task<MTReservation> CreateReservations(MTReservation mTReservation);
         Task UpdateReservations(int id, MTReservation mTReservation);
         Task DeleteReservations(MTReservation mTReservation);

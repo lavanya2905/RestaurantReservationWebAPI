@@ -19,6 +19,7 @@ namespace DRestautrantRes
 
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}"), Required]
 
+       
         public DateTime ResDate { get; set; }
 
         [MinLength(2), Required]

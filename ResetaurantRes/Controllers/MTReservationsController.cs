@@ -90,40 +90,37 @@ namespace ResetaurantRes.Controllers
         public async Task<ActionResult<MTReservation>> PostMTReservation(MTReservation mTReservation)
         {
 
-            try
-            {
-                _context.MTReservation.Add(mTReservation);
-                List<MRAvailableTables> resAvailTaableresult = await _context.MRAvailableTables.Where(mRAvailableTables =>
-                 (mRAvailableTables.Capacity >= mTReservation.NoofPersons)).OrderBy(mRAvailableTables => mRAvailableTables.RtableId).ToListAsync();
-                foreach (MRAvailableTables mRAvailableTables in resAvailTaableresult)
+            if (mTReservation.ResDate<System.DateTime.Now.AddMonths(12) && Convert.ToDateTime(mTReservation.ResDate).AddDays(1) >= System.DateTime.Now)
                 {
-                    int resTableProcResult = _restableResvation.GetReservationsByDatetable(mTReservation.ResDate, mRAvailableTables.RtableId);
-                    if (resTableProcResult == 0)
-                    {
-                        if (mTReservation.ResDate < System.DateTime.Now.AddMonths(12) && mTReservation.ResDate >= System.DateTime.Now)
-                        {
-                            mTReservation.RtableId = mRAvailableTables.RtableId;
-                            await _context.SaveChangesAsync();
-                            resAvailTaableresult.Clear();
-                            return CreatedAtAction("GetMTReservation" + "", new { id = mTReservation.ResId }, mTReservation);
 
-                        }
-                        else
-                        {
-                            resAvailTaableresult.Clear();
-                            return NotFound();
-                        }
+                    _context.MTReservation.Add(mTReservation);
+                     List<MRAvailableTables> resAvailTaableresult = await _context.MRAvailableTables.Where(mRAvailableTables =>
+                     (mRAvailableTables.Capacity >= mTReservation.NoofPersons)).OrderBy(mRAvailableTables => mRAvailableTables.RtableId).ToListAsync();
+                      foreach (MRAvailableTables mRAvailableTables in resAvailTaableresult)
+                         {
+                            int resTableProcResult = _restableResvation.GetReservationsByDatetable(mTReservation.ResDate, mRAvailableTables.RtableId);
+                            if (resTableProcResult == 0)
+                            {
+                       
+                                    mTReservation.RtableId = mRAvailableTables.RtableId;
+                                    await _context.SaveChangesAsync();
+                                    resAvailTaableresult.Clear();
+                                    return CreatedAtAction("GetMTReservation" + "", new { id = mTReservation.ResId }, mTReservation);
 
-                    }
-                   
-                }
-            }
-            catch (Exception ex)
-            {
+                       
+                            }
+                      }
+
                 return NotFound();
             }
+            else
+             {
+                    
+                    return BadRequest();
+             }
 
-            return CreatedAtAction("GetMTReservation" + "", new { id = mTReservation.ResId }, mTReservation);
+
+         
 
         }
 

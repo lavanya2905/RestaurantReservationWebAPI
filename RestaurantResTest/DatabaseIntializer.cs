@@ -14,38 +14,51 @@ using Xunit;
 
 namespace RestaurantResTest
 {
- public  class DatabaseIntializer
+ public  class DatabaseIntializer:IDisposable
     {
         
             private static readonly object _lock = new object();
             private static bool _databaseInitialized;
-
-        private readonly IRestableResvation _restableResvation;
+            private readonly IRestableResvation _restableResvation;
 
         
 
         public DatabaseIntializer()
         {
-           
+            Connection = new SqlConnection(@"Server=(localdb)\mssqllocaldb;Trusted_Connection=True");
+
+
             Seed();
 
             Connection.Open();
         }
 
           public DbConnection Connection { get; }
-
-            public ResetaurantResContext CreateContext(DbTransaction transaction = null)
-            {
-                 var context  = new ResetaurantResContext(new DbContextOptionsBuilder<ResetaurantResContext>()
-                 .UseSqlServer("Data Source=LAPTOP-LR3RK1IO\\SQLEXPRESS;Initial Catalog=restaurant;Integrated Security=True;Pooling=False").Options);
+        public ResetaurantResContext CreateContext(DbTransaction transaction = null)
+        {
+            var context = new ResetaurantResContext(new DbContextOptionsBuilder<ResetaurantResContext>().UseSqlServer(Connection).Options);
 
             if (transaction != null)
-                {
-                    context.Database.UseTransaction(transaction);
-                }
-
-                return context;
+            {
+                context.Database.UseTransaction(transaction);
             }
+
+            return context;
+        }
+
+        //public ResetaurantResContext CreateContext(DbTransaction transaction = null)
+        //    {
+        //         var context  = new ResetaurantResContext(new DbContextOptionsBuilder<ResetaurantResContext>()
+        //         .UseSqlServer("Data Source=LAPTOP-LR3RK1IO\\SQLEXPRESS;Initial Catalog=restaurant;Integrated Security=True;Pooling=False").Options);
+
+        //    if (transaction != null)
+        //        {
+        //            context.Database.UseTransaction(transaction);
+        //        }
+
+        //        return context;
+        //}
+    
             public void Seed()
             {
 
@@ -104,7 +117,9 @@ namespace RestaurantResTest
 
 
         //}
+        public void Dispose() => Connection.Dispose();
     }
+   
 }
 
 
