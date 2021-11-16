@@ -47,11 +47,22 @@ namespace RestaurantReservation.Controllers
                         }
 
                     }
+               
+                
                 }
+                return NotFound();
 
             }
-        
+            else
+            {
+                return BadRequest();
+            }
+
         }
+
     }
+        
+       
+    
     
 }
