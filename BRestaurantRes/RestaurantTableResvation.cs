@@ -23,22 +23,15 @@ namespace BRestaurantReservation
             await _context.SaveChangesAsync();
             return tTableReservation;
         }
-        public List<TTableReservation> GetReservationsByDatetable(DateTime resdate)
+
+        public int GetReservationsByDatetable(DateTime resdate, int resid)
         {
 
-           List<TTableReservation> result=  _context.TTableReservation.Where(mtReservation =>
-            (mtReservation.ResDate == resdate)).ToList();
-            return result;
+            return _context.TTableReservation.Where(mtReservation =>
+            (mtReservation.ResDate == resdate) && (mtReservation.TableId == resid)).Count();
+
 
         }
-        //public int GetReservationsByDatetable(DateTime resdate, int resid)
-        //{
-
-        //    return _context.TTableReservation.Where(mtReservation =>
-        //    (mtReservation.ResDate == resdate) && (mtReservation.TableId == resid)).Count();
-
-
-        //}
 
     }
 }

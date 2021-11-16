@@ -9,6 +9,6 @@ namespace BRestaurantReservation
    public interface IRestaurantTableResvation
    {
        Task<TTableReservation> CreateReservation(TTableReservation tTableReservation);
-        List<TTableReservation> GetReservationsByDatetable(DateTime resdate);
+        int GetReservationsByDatetable(DateTime resdate,int resid);
     }
 }
