@@ -17,7 +17,7 @@ namespace BRestaurantReservation
         {
             var lowercase = new Regex("[a-z]+");
             var uppercase = new Regex("[A-Z]+");
-            return (lowercase.IsMatch(name) && uppercase.IsMatch(name));
+            return (lowercase.IsMatch(name) || uppercase.IsMatch(name));
         }
 
     }

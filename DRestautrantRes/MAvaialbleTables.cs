@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 namespace DRestaurantReservation
 {
-    public class MAvaialbleTables
+    public sealed class MAvaialbleTables
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
