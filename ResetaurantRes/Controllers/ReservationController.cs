@@ -24,39 +24,34 @@ namespace RestaurantReservation.Controllers
         [HttpPost]
         public async Task<ActionResult<TTableReservation>> PostReservation([FromBody] TTableReservation tTableReservation)
         {
+
             var validator = new ReservationDtoValidation();
             var validRes = validator.Validate(tTableReservation);
             if (!validRes.IsValid)
             {
                 if (tTableReservation.ResDate < System.DateTime.Now.AddMonths(12) && tTableReservation.ResDate >= System.DateTime.Now)
-                 {
-                  _context.TTableReservation.Add(tTableReservation);
-                   List<MAvaialbleTables> resAvailTaableresult = await _context.MAvaialbleTables.Where(mRAvailableTables =>
-                   (mRAvailableTables.TCapacity >= tTableReservation.NumberOfPersons)).OrderBy(mRAvailableTables => mRAvailableTables.TableId).ToListAsync();
-                      foreach (MAvaialbleTables mRAvailableTables in resAvailTaableresult)
-                     {
-                      int resTableProcResult = _restaurantTableResvation.GetReservationsByDatetable(tTableReservation.ResDate, mRAvailableTables.TableId);
-                      if (resTableProcResult == 0)
-                     {
+                {
+                    _context.TTableReservation.Add(tTableReservation);
+                    List<MAvaialbleTables> resAvailTaableresult = await _context.MAvaialbleTables.Where(mRAvailableTables =>
+                    (mRAvailableTables.TCapacity >= tTableReservation.NumberOfPersons)).OrderBy(mRAvailableTables => mRAvailableTables.TableId).ToListAsync();
+                    foreach (MAvaialbleTables mRAvailableTables in resAvailTaableresult)
+                    {
+                        int resTableProcResult = _restaurantTableResvation.GetReservationsByDatetable(tTableReservation.ResDate, mRAvailableTables.TableId);
+                        if (resTableProcResult == 0)
+                        {
 
-                        tTableReservation.TableId = mRAvailableTables.TableId;
-                        await _context.SaveChangesAsync();
-                        resAvailTaableresult.Clear();
-                        return CreatedAtAction("GetMTReservation" + "", new { id = tTableReservation.ResId }, tTableReservation);
-                    }
+                            tTableReservation.TableId = mRAvailableTables.TableId;
+                            await _context.SaveChangesAsync();
+                            resAvailTaableresult.Clear();
+                            return CreatedAtAction("GetMTReservation" + "", new { id = tTableReservation.ResId }, tTableReservation);
+                        }
 
                     }
                 }
 
-                return NotFound();
             }
-            else
-            {
-                return BadRequest();
-            }
-            
+        
         }
-           
-
     }
+    
 }
