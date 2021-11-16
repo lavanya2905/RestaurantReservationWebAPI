@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="EntityMock.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
     <PackageReference Include="Moq" Version="4.16.1" />
@@ -22,9 +27,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BRestaurantRes\BRestaurantRes.csproj" />
-    <ProjectReference Include="..\DRestautrantRes\DRestautrantRes.csproj" />
-    <ProjectReference Include="..\ResetaurantRes\ResetaurantRes.csproj" />
+    <ProjectReference Include="..\BRestaurantRes\BRestaurantReservation.csproj" />
+    <ProjectReference Include="..\DRestautrantRes\DRestaurantReservation.csproj" />
+    <ProjectReference Include="..\ResetaurantRes\RestaurantReservation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BRestaurantReservation">
+      <HintPath>..\BRestaurantRes\bin\Debug\net5.0\BRestaurantReservation.dll</HintPath>
+    </Reference>
+    <Reference Include="DRestaurantReservation">
+      <HintPath>..\BRestaurantRes\bin\Debug\net5.0\DRestaurantReservation.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
