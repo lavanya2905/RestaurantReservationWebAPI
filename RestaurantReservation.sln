@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BRestaurantReservation", "B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestaurantReservationTest", "RestaurantResTest\RestaurantReservationTest.csproj", "{D5D6C8C9-7158-495C-90F2-AC83FF2873D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantReservationAPI", "RestaurantReservationAPI\RestaurantReservationAPI.csproj", "{48C10114-6CF8-4DA9-9243-9C690B34D1B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{D5D6C8C9-7158-495C-90F2-AC83FF2873D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5D6C8C9-7158-495C-90F2-AC83FF2873D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5D6C8C9-7158-495C-90F2-AC83FF2873D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48C10114-6CF8-4DA9-9243-9C690B34D1B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48C10114-6CF8-4DA9-9243-9C690B34D1B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48C10114-6CF8-4DA9-9243-9C690B34D1B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48C10114-6CF8-4DA9-9243-9C690B34D1B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

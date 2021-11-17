@@ -23,16 +23,14 @@ namespace RestaurantReservationTest
                 {
                     var controller = new ReservationController(context);
                     var responsereserv = context.Set<TTableReservation>().Single(e => e.Name == "lava");
-                    responsereserv.ResId = 0;
-                    //var response = controller.PostReservation(responsereserv);
-                    //Assert.NotNull(response.Result);
-                               
+                    var response = controller.PostReservation(responsereserv);
+                    Assert.Equal("ItemFour", response.Result.Value.Name);
+                    Assert.NotNull(response.Result);
+
                 }
 
             }
 
         }
     }
-
-
 }

@@ -5,14 +5,12 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Data.Common;
-
 namespace RestaurantReservationTest
 {
    public class DatabaseIntializer:IDisposable
    {
             private static readonly object _lock = new object();
             private static bool _databaseInitialized;
-            private readonly IRestaurantTableResvation _restaurantTableResvation;
             public DbConnection Connection { get; }
             public DatabaseIntializer()
                 {
@@ -20,7 +18,6 @@ namespace RestaurantReservationTest
                    Seed();
                    Connection.Open();
                 }
-
             public RestaurantReservationContext CreateContext(DbTransaction transaction = null)
             {
                  var context = new RestaurantReservationContext(new DbContextOptionsBuilder<RestaurantReservationContext>().UseSqlServer(Connection).Options);
@@ -41,20 +38,19 @@ namespace RestaurantReservationTest
                                 context.Database.EnsureDeleted();
                                 context.Database.EnsureCreated();
                                 context.TTableReservation.AddRange(
-                                      new TTableReservation() {  ResDate = DateTime.Now.AddDays(3), Name = "lava", NumberOfPersons = 2, TableId = 4 });
+                                new TTableReservation() {ResDate = DateTime.Now.AddDays(3),Name = "lava",NumberOfPersons = 2,TableId = 4 });
                                 context.MAvaialbleTables.AddRange(
-                                 new MAvaialbleTables() { TCapacity = 2, TActive = 1 },
-                                 new MAvaialbleTables() { TCapacity = 6, TActive = 1 },
-                                 new MAvaialbleTables() { TCapacity = 6, TActive = 1 },
-                                 new MAvaialbleTables() { TCapacity = 6, TActive = 1 },
-                                 new MAvaialbleTables() { TCapacity = 12, TActive = 1 });
+                                 new MAvaialbleTables() {TCapacity = 2,TActive = 1},
+                                 new MAvaialbleTables() {TCapacity = 6,TActive = 1},
+                                 new MAvaialbleTables() {TCapacity = 6,TActive = 1},
+                                 new MAvaialbleTables() {TCapacity = 6,TActive = 1},
+                                 new MAvaialbleTables() {TCapacity = 12,TActive = 1});
                                  context.SaveChanges();
                             }
                             _databaseInitialized = true;
                         }
                   }
             }
-
             public void Dispose() => Connection.Dispose();
     }
 
