@@ -7,7 +7,6 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Net;
 
 namespace RestaurantReservation.Controllers
 {
@@ -24,44 +23,36 @@ namespace RestaurantReservation.Controllers
         }
         [HttpPost]
         public async Task<ActionResult<TTableReservation>> PostReservation([FromBody] TTableReservation tTableReservation)
-        {  
-            //try
-            //{
-                    var validator = new ReservationDtoValidation();
-                    var validRes = validator.Validate(tTableReservation);
-                    if (validRes.IsValid)
+        {
+            try
+            {
+                var validator = new ReservationDtoValidation();
+                var validRes = validator.Validate(tTableReservation);
+                if (validRes.IsValid)
+                {
+                    _context.TTableReservation.Add(tTableReservation);
+                    var result = _context.MAvaialbleTables.FromSqlRaw("exec P_GetAvailableTables @ResDate={0},@NumberOfPersons={1}", tTableReservation.ResDate.ToString("yyyy-MM-dd"), tTableReservation.NumberOfPersons).ToList();
+                    if (result.Count != 0)
                     {
-                           _context.TTableReservation.Add(tTableReservation);
-                            var exceptionList = _context.TTableReservation.Where(x => x.ResDate == tTableReservation.ResDate).ToList();
-                    string ddd = Convert.ToDateTime(tTableReservation.ResDate).ToString("yyyy-MM-dd");
-                   var result1 = _context.MAvaialbleTables.FromSqlRaw("exec P_GetAvailableTables").DefaultIfEmpty().First();
-                   var result = _context.MAvaialbleTables.FromSqlRaw("exec P_GetAvailableTables @ResDate={0}", Convert.ToDateTime(tTableReservation.ResDate).ToString("yyyy-MM-dd")).DefaultIfEmpty().First();
-                    if (result != null)
-                            {
-                                tTableReservation.TableId = result.TableId;
-                                await _context.SaveChangesAsync();
-                                return new ObjectResult(tTableReservation) { StatusCode = StatusCodes.Status201Created };
-                            }
-                            else
-                            {
-                                return NotFound();
-                            }
+                        tTableReservation.TableId = result.FirstOrDefault().TableId;
+                        tTableReservation.ResDate = tTableReservation.ResDate.Date;
+                        await _context.SaveChangesAsync();
+                        return new ObjectResult(tTableReservation) { StatusCode = StatusCodes.Status201Created };
                     }
                     else
                     {
-                       return NotFound();
+                        return NotFound();
                     }
-            //}
-
-            //catch(Exception ex)
-            //{
-            //    return NotFound();
-            //}
-          
-
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return NotFound();
+            }
         }
-
-
     }
-
 }
