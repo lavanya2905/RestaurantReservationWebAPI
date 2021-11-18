@@ -14,6 +14,6 @@ namespace RestaurantReservation
                 .ConfigureWebHostDefaults(webBuilder =>
         {
                     webBuilder.UseStartup<Startup>();
-         });
+        });
     }
 }

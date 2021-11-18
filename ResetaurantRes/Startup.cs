@@ -6,7 +6,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using BRestaurantReservation.Data;
-using DRestaurantReservation;
 using BRestaurantReservation;
 namespace RestaurantReservation
 {
@@ -17,23 +16,20 @@ namespace RestaurantReservation
             Configuration = configuration;
         }
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RestaurantReservation", Version = "v1" });
             });
-
+            services.AddCors();
             services.AddDbContext<RestaurantReservationContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("RestaurantReservationContext")));
-  		services.AddScoped<IRestaurantTableResvation, RestaurantTableResvation>();
+            services.AddScoped<IRestaurantTableResvation, RestaurantTableResvation>();
+
         }
-          
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -42,13 +38,11 @@ namespace RestaurantReservation
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ResetaurantRes v1"));
             }
-
+           
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            app.UseCors();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

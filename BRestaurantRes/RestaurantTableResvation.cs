@@ -1,21 +1,41 @@
 ﻿using BRestaurantReservation.Data;
 using DRestaurantReservation;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BRestaurantReservation
 {
     public class RestaurantTableResvation:IRestaurantTableResvation
     {
-        private readonly RestaurantReservationContext _context;
-        public RestaurantTableResvation(RestaurantReservationContext context)
+        private readonly RestaurantReservationContext dbContext;
+        public RestaurantTableResvation(RestaurantReservationContext Context)
         {
-            _context = context;
+            dbContext = Context;
         }
-        public async Task<TTableReservation> CreateReservation(TTableReservation tTableReservation)
+        public async Task<TTableReservation> CreateReservation(ReservationDto objReservationDto)
         {
-            _context.TTableReservation.Add(tTableReservation);
-            await _context.SaveChangesAsync();
-            return tTableReservation;
+            try
+            {
+                var reservedTables = dbContext.TTableReservation.Where(x => x.ResDate == objReservationDto.ResDate.Date).Select(x => x.TableId);
+                var avaialbleTables = dbContext.MAvaialbleTables.Where(x => x.TCapacity >= objReservationDto.NumberOfPersons && !reservedTables.Contains(x.TableId) && x.TActive == 1).FirstOrDefault();
+                if (avaialbleTables != null)
+                {
+                    TTableReservation objReservation = new TTableReservation();
+                    objReservation.TableId = avaialbleTables.TableId;
+                    objReservation.Name = objReservationDto.Name;
+                    objReservation.NumberOfPersons = objReservationDto.NumberOfPersons;
+                    objReservation.ResDate = objReservationDto.ResDate.Date;
+                    dbContext.TTableReservation.Add(objReservation);
+                    await dbContext.SaveChangesAsync();
+                    return objReservation;
+                }
+                return null;
+            }
+            catch (System.Exception ex)
+            {
+                throw ex;
+            }
+           
         }
     }
 }

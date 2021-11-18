@@ -2,13 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using BRestaurantReservation;
 using DRestaurantReservation;
 using BRestaurantReservation.Data;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
 
 namespace RestaurantReservationAPI.Controllers
 {
@@ -16,46 +14,44 @@ namespace RestaurantReservationAPI.Controllers
     [ApiController]
     public sealed class ReservationController : ControllerBase
     {
-        private readonly RestaurantReservationContext _context;
-        private readonly IRestaurantTableResvation _restaurantTableResvation;
-        public ReservationController(RestaurantReservationContext Context)
+        private readonly RestaurantReservationContext dbContext;
+        private readonly IRestaurantTableResvation restaurantTableResvation;
+        public ReservationController(RestaurantReservationContext DBContext, IRestaurantTableResvation RestaurantTableResvation)
         {
-            _context = Context;
-            _restaurantTableResvation = new RestaurantTableResvation(Context);
+            dbContext = DBContext;
+            restaurantTableResvation = RestaurantTableResvation;
         }
         [HttpPost]
-        public async Task<ActionResult<TTableReservation>> PostReservation([FromBody] TTableReservation tTableReservation)
+        public async Task<ActionResult<TTableReservation>> PostReservation([FromBody] ReservationDto pReservationDto)
         {
-            //try
-            //{
-            var validator = new ReservationDtoValidation();
-            var validRes = validator.Validate(tTableReservation);
-            if (validRes.IsValid)
+            try
             {
-                _context.TTableReservation.Add(tTableReservation);
-                var result = _context.MAvaialbleTables.FromSqlRaw("exec P_GetAvailableTables @ResDate={0},@NumberOfPersons={1}",
-                    tTableReservation.ResDate.Date, tTableReservation.NumberOfPersons).ToList();
-                if (result.Count != 0)
+                if (ModelState.IsValid)
                 {
-                    tTableReservation.TableInfo = result.FirstOrDefault();
-                    tTableReservation.ResDate = tTableReservation.ResDate.Date;
-                    await _context.SaveChangesAsync();
-                    return new ObjectResult(tTableReservation) { StatusCode = StatusCodes.Status201Created };
+                    var validator = new ReservationDtoValidation();
+                    var validRes = validator.Validate(pReservationDto);
+                    if (validRes.IsValid)
+                    {
+                        var reservedTables = dbContext.TTableReservation.Where(x => x.ResDate == pReservationDto.ResDate.Date).Select(x => x.TableId);
+                        var avaialbleTables = dbContext.MAvaialbleTables.Where(x => x.TCapacity >= pReservationDto.NumberOfPersons && !reservedTables.Contains(x.TableId) && x.TActive==1).FirstOrDefault();
+                        if (avaialbleTables != null)
+                        {
+                            TTableReservation objReservation = new TTableReservation();
+                            objReservation.TableId = avaialbleTables.TableId;
+                            objReservation.Name = pReservationDto.Name;
+                            objReservation.NumberOfPersons = pReservationDto.NumberOfPersons;
+                            objReservation.ResDate = pReservationDto.ResDate.Date;
+                            objReservation = await restaurantTableResvation.CreateReservation(objReservation);
+                            return new ObjectResult(objReservation) { StatusCode = StatusCodes.Status201Created };
+                        }
+                    }
                 }
-                else
-                {
-                    return new ObjectResult(tTableReservation) { StatusCode = StatusCodes.Status404NotFound };
-                }
+                return new ObjectResult(null) { StatusCode = StatusCodes.Status404NotFound };
             }
-            else
+            catch (Exception ex)
             {
-                return new ObjectResult(tTableReservation) { StatusCode = StatusCodes.Status404NotFound };
+                return new ObjectResult(null) { StatusCode = StatusCodes.Status404NotFound };
             }
-            //}
-            //catch (Exception)
-            //{
-            //    return new ObjectResult(tTableReservation) { StatusCode = StatusCodes.Status404NotFound };
-            //}
         }
     }
 }

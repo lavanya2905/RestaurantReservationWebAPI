@@ -5,6 +5,6 @@ namespace BRestaurantReservation
 {
    public interface IRestaurantTableResvation
    {
-       Task<TTableReservation> CreateReservation(TTableReservation tTableReservation);
+       Task<TTableReservation> CreateReservation(ReservationDto objReservationDto);
    }
 }

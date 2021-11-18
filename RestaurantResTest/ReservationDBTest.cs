@@ -1,10 +1,13 @@
-﻿using DRestaurantReservation;
+﻿using BRestaurantReservation;
+using DRestaurantReservation;
+using Microsoft.AspNetCore.Mvc;
 using RestaurantReservation.Controllers;
+using System;
 using System.Linq;
 using Xunit;
 namespace RestaurantReservationTest
 {
-   public class ReservationDBTest : IClassFixture<DatabaseIntializer>
+    public class ReservationDBTest : IClassFixture<DatabaseIntializer>
     {
         public ReservationDBTest(DatabaseIntializer fixture) => Fixture = fixture;
         public DatabaseIntializer Fixture { get; }
@@ -15,17 +18,11 @@ namespace RestaurantReservationTest
             {
                 using (var context = Fixture.CreateContext(transaction))
                 {
-                    var response = context.Set<TTableReservation>().Single(e => e.Name == "lava");
-                    Assert.Equal("lava", response.Name);
-                    Assert.NotNull(response);
-                }
-                using (var context = Fixture.CreateContext(transaction))
-                {
-                    var controller = new ReservationController(context);
-                    var responsereserv = context.Set<TTableReservation>().Single(e => e.Name == "lava");
-                    var response = controller.PostReservation(responsereserv);
-                    Assert.Equal("ItemFour", response.Result.Value.Name);
-                    Assert.NotNull(response.Result);
+                    IRestaurantTableResvation restaurantTableResvation = new RestaurantTableResvation(context);
+                    var controller = new ReservationController(restaurantTableResvation);
+                    ReservationDto rDto = new ReservationDto() { Name = "lava", ResDate = DateTime.Now.AddDays(3), NumberOfPersons = 2 };
+                    var result = controller.PostReservation(rDto);
+                    Assert.NotNull(result);
 
                 }
 
