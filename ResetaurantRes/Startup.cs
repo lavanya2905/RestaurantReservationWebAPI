@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using BRestaurantReservation.Data;
 using DRestaurantReservation;
+using BRestaurantReservation;
 namespace RestaurantReservation
 {
     public class Startup
@@ -29,6 +30,7 @@ namespace RestaurantReservation
 
             services.AddDbContext<RestaurantReservationContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("RestaurantReservationContext")));
+  		services.AddScoped<IRestaurantTableResvation, RestaurantTableResvation>();
         }
           
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

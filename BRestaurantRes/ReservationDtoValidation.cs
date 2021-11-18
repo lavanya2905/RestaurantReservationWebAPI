@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace BRestaurantReservation
 {
-  public class ReservationDtoValidation : AbstractValidator<TTableReservation>
+  public class ReservationDtoValidation : AbstractValidator<ReservationDto>
   {
         public ReservationDtoValidation()
         {

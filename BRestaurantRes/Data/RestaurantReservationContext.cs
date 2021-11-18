@@ -28,7 +28,8 @@ namespace BRestaurantReservation.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.ApplyConfigurationsFromAssembly.Add(new TTableReservation());
-            modelBuilder.Entity<TTableReservation>().HasNoKey();
+            //  modelBuilder.Entity<TTableReservation>().HasNoKey();
+         
         }
 
 

@@ -1,3 +1,4 @@
+using BRestaurantReservation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,6 +28,8 @@ namespace RestaurantReservationAPI
         {
 
             services.AddControllers();
+           
+            services.AddScoped<IRestaurantTableResvation, RestaurantTableResvation>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

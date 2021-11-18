@@ -37,7 +37,7 @@ namespace RestaurantReservationAPI.Controllers
                     tTableReservation.ResDate.Date, tTableReservation.NumberOfPersons).ToList();
                 if (result.Count != 0)
                 {
-                    tTableReservation.TableId = result.FirstOrDefault().TableId;
+                    tTableReservation.TableInfo = result.FirstOrDefault();
                     tTableReservation.ResDate = tTableReservation.ResDate.Date;
                     await _context.SaveChangesAsync();
                     return new ObjectResult(tTableReservation) { StatusCode = StatusCodes.Status201Created };

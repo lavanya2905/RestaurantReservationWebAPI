@@ -37,14 +37,15 @@ namespace RestaurantReservationTest
                             {
                                 context.Database.EnsureDeleted();
                                 context.Database.EnsureCreated();
-                                context.TTableReservation.AddRange(
-                                new TTableReservation() {ResDate = DateTime.Now.AddDays(3),Name = "lava",NumberOfPersons = 2,TableId = 4 });
-                                context.MAvaialbleTables.AddRange(
-                                 new MAvaialbleTables() {TCapacity = 2,TActive = 1},
-                                 new MAvaialbleTables() {TCapacity = 6,TActive = 1},
-                                 new MAvaialbleTables() {TCapacity = 6,TActive = 1},
-                                 new MAvaialbleTables() {TCapacity = 6,TActive = 1},
-                                 new MAvaialbleTables() {TCapacity = 12,TActive = 1});
+                                 context.MAvaialbleTables.AddRange(
+                                 new MAvaialbleTables() { TCapacity = 2, TActive = 1 },
+                                 new MAvaialbleTables() { TCapacity = 6, TActive = 1 },
+                                 new MAvaialbleTables() { TCapacity = 6, TActive = 1 },
+                                 new MAvaialbleTables() { TCapacity = 6, TActive = 1 },
+                                 new MAvaialbleTables() { TCapacity = 12, TActive = 1 });
+                                 context.TTableReservation.AddRange(
+                                new TTableReservation() {ResDate = DateTime.Now.AddDays(3),Name = "lava",NumberOfPersons = 2 });
+                                
                                  context.SaveChanges();
                             }
                             _databaseInitialized = true;
