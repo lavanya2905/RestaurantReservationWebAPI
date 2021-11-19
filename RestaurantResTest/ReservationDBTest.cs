@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using RestaurantReservation.Controllers;
 using System;
-
 using Xunit;
 
 namespace RestaurantReservationTest
@@ -32,7 +31,7 @@ namespace RestaurantReservationTest
                     var controller = new ReservationController(restaurantTableResvation);
                     ReservationDto rDto = new ReservationDto() { Name = "lava", ResDate = DateTime.Now.AddDays(400), NumberOfPersons = 2 };
                     var actionResult = await controller.PostReservation(rDto);
-                    Microsoft.AspNetCore.Mvc.ObjectResult objectResponse = Assert.IsType<Microsoft.AspNetCore.Mvc.ObjectResult>(actionResult);
+                    StatusCodeResult objectResponse = Assert.IsType<StatusCodeResult>(actionResult);
                     Assert.Equal(404, objectResponse.StatusCode);
                     Assert.NotNull(actionResult);
                 }

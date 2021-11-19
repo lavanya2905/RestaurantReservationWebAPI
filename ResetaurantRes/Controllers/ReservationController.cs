@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using BRestaurantReservation;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Net;
 
 namespace RestaurantReservation.Controllers
 {

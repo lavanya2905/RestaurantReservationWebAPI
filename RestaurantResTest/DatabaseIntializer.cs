@@ -1,5 +1,4 @@
-﻿using BRestaurantReservation;
-using BRestaurantReservation.Data;
+﻿using BRestaurantReservation.Data;
 using DRestaurantReservation;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
