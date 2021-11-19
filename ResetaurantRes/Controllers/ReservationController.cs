@@ -7,7 +7,7 @@ using System.Net;
 
 namespace RestaurantReservation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Reservation")]
     [ApiController]
     public sealed class ReservationController : ControllerBase
     {
