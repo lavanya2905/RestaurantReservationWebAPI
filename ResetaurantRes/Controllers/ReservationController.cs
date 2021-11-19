@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BRestaurantReservation;
-using DRestaurantReservation;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Net;
 
 namespace RestaurantReservation.Controllers
 {
@@ -17,7 +17,7 @@ namespace RestaurantReservation.Controllers
             restaurantTableResvation = RestaurantTableResvation;
         }
         [HttpPost]
-       public async Task<ActionResult<TTableReservation>> PostReservation([FromBody] ReservationDto objReservationDto)
+        public async Task<IActionResult> PostReservation([FromBody] ReservationDto objReservationDto)
         {
             try
             {
@@ -29,15 +29,14 @@ namespace RestaurantReservation.Controllers
                     {
                         var objResult = await restaurantTableResvation.CreateReservation(objReservationDto);
                         if (objResult != null)
-                            return new ObjectResult(objReservationDto) { StatusCode = StatusCodes.Status201Created };
-                      
+                        return StatusCode(StatusCodes.Status201Created);
                     }
                 }
-                return new ObjectResult(objReservationDto) { StatusCode = StatusCodes.Status404NotFound };
+                return StatusCode(StatusCodes.Status404NotFound);
             }
             catch (Exception)
             {
-                return new ObjectResult(objReservationDto) { StatusCode = StatusCodes.Status500InternalServerError };
+               return StatusCode(StatusCodes.Status404NotFound);
             }
         }
     }

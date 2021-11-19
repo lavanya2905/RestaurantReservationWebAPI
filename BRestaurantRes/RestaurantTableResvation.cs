@@ -17,7 +17,7 @@ namespace BRestaurantReservation
             try
             {
                 var reservedTables = dbContext.TTableReservation.Where(x => x.ResDate == objReservationDto.ResDate.Date).Select(x => x.TableId);
-                var avaialbleTables = dbContext.MAvaialbleTables.Where(x => x.TCapacity >= objReservationDto.NumberOfPersons && !reservedTables.Contains(x.TableId) && x.TActive == 1).FirstOrDefault();
+                var avaialbleTables = dbContext.MAvailableTables.Where(x => x.Capacity >= objReservationDto.NumberOfPersons && !reservedTables.Contains(x.TableId) && x.Active == 1).FirstOrDefault();
                 if (avaialbleTables != null)
                 {
                     TTableReservation objReservation = new TTableReservation();
@@ -35,7 +35,6 @@ namespace BRestaurantReservation
             {
                 throw ex;
             }
-           
         }
     }
 }

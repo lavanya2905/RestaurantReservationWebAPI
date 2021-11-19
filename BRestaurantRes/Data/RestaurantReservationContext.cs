@@ -8,7 +8,7 @@ namespace BRestaurantReservation.Data
             : base(options)
         {
         }
-        public DbSet<DRestaurantReservation.MAvaialbleTables> MAvaialbleTables { get; set; }
+        public DbSet<DRestaurantReservation.MAvailableTables> MAvailableTables { get; set; }
         public DbSet<DRestaurantReservation.TTableReservation> TTableReservation { get; set; }
     }
 }
